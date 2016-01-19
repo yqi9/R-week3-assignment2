@@ -1,1 +1,51 @@
 # R-week3-assignment2
+
+makeCacheMatrix <- function(x= matrix()){
+	inv<-NULL
+	set<-function(y){
+		x<<-y
+		inv<<-NULL
+	}
+	get <-function() x
+	setinverse<-function(inverse) inv<<-inverse
+	getinverse<-function() inv
+	list(set=set, get=get, setinverse=setinverse, getinverse=getinverse)
+}
+
+cacheSolve <-function(x,...){
+	inv <- x$getinverse()
+	if(!is.null(inv)){
+		message("getting cached data")
+		return(inv)
+	}
+	data <- x$get()
+	inv <- solve(data,...)
+	x$setinverse(inv)
+	inv
+}
+
+##sample run:
+##x<-rbind(c(1,0,2),c(3,4,7),c(1,2,3))
+##> a = makeCacheMatrix(x)
+##> a$get()
+##     [,1] [,2] [,3]
+##[1,]    1    0    2
+##[2,]    3    4    7
+##[3,]    1    2    3
+
+##first run:
+##>cacheSolve(a)
+##      [,1] [,2] [,3]
+##[1,]   -1  2.0 -4.0
+##[2,]   -1  0.5 -0.5
+##[3,]    1 -1.0  2.0
+
+##second run:
+##>cacheSolve(a)
+##getting cached data
+##     [,1] [,2] [,3]
+##[1,]   -1  2.0 -4.0
+##[2,]   -1  0.5 -0.5
+##[3,]    1 -1.0  2.0
+
+
